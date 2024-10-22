@@ -11,19 +11,19 @@ public class Main {
         MyArrayList<Integer> list = new MyArrayList<>();
         list.add(5);
         list.add(3);
+        list.add(8);
         list.add(1);
         list.add(4);
-        list.add(2);
 
-        System.out.println("Исходный список: ");
+        System.out.println("Исходный список:");
         for (int i = 0; i < list.size(); i++) {
             System.out.print(list.get(i) + " ");
         }
 
-        // Сортировка с помощью QuickSort
-        list.sort(Comparator.naturalOrder());
+        // Сортируем список
+        QuickSort.sort(list, Comparator.naturalOrder());
 
-        System.out.println("\nОтсортированный список: ");
+        System.out.println("\nОтсортированный список:");
         for (int i = 0; i < list.size(); i++) {
             System.out.print(list.get(i) + " ");
         }

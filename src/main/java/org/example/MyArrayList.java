@@ -1,13 +1,13 @@
 package org.example;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
- * Простой класс, реализующий динамический массив.
+ * Простой класс, реализующий динамический массив (ArrayList).
  * @param <E> тип элементов в этом массиве
  */
 public class MyArrayList<E> {
+
     private Object[] elements; // Хранит элементы массива
     private int size; // Текущий размер массива (количество элементов)
     private static final int INITIAL_CAPACITY = 10; // Начальная емкость массива
@@ -17,7 +17,6 @@ public class MyArrayList<E> {
      */
     public MyArrayList() {
         elements = new Object[INITIAL_CAPACITY];
-        size = 0;
     }
 
     /**
@@ -25,7 +24,7 @@ public class MyArrayList<E> {
      * @param element элемент, который нужно добавить
      */
     public void add(E element) {
-        ensureCapacity();
+        ensureCapacity(); // Увеличиваем емкость, если необходимо
         elements[size++] = element; // Добавление элемента и увеличение размера
     }
 
@@ -35,10 +34,8 @@ public class MyArrayList<E> {
      * @param element элемент, который нужно добавить
      */
     public void add(int index, E element) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
-        }
-        ensureCapacity();
+        validateIndex(index); // Проверка индекса
+        ensureCapacity(); // Увеличиваем емкость, если необходимо
         System.arraycopy(elements, index, elements, index + 1, size - index); // Сдвиг элементов
         elements[index] = element; // Добавление нового элемента
         size++;
@@ -50,9 +47,7 @@ public class MyArrayList<E> {
      * @return элемент по указанному индексу
      */
     public E get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
-        }
+        validateIndex(index); // Проверка индекса
         return (E) elements[index]; // Возврат элемента
     }
 
@@ -62,9 +57,7 @@ public class MyArrayList<E> {
      * @return удаленный элемент
      */
     public E remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
-        }
+        validateIndex(index); // Проверка индекса
         E removedElement = (E) elements[index];
         int numMoved = size - index - 1; // Количество элементов, которое нужно сдвинуть
         if (numMoved > 0) {
@@ -83,56 +76,19 @@ public class MyArrayList<E> {
     }
 
     /**
-     * Сортирует элементы в массиве с использованием алгоритма Quicksort.
-     * @param comparator компаратор для определения порядка сортировки
+     * Возвращает текущий размер массива.
+     * @return текущий размер
      */
-    public void sort(Comparator<? super E> comparator) {
-        quicksort(0, size - 1, comparator);
+    public int size() {
+        return size;
     }
 
     /**
-     * Реализация алгоритма Quicksort.
-     * @param low        начальный индекс
-     * @param high       конечный индекс
-     * @param comparator компаратор для определения порядка сортировки
+     * Проверяет, является ли массив пустым.
+     * @return true, если массив пустой, иначе false
      */
-    private void quicksort(int low, int high, Comparator<? super E> comparator) {
-        if (low < high) {
-            int pivotIndex = partition(low, high, comparator);
-            quicksort(low, pivotIndex - 1, comparator);
-            quicksort(pivotIndex + 1, high, comparator);
-        }
-    }
-
-    /**
-     * Разделяет массив на части для алгоритма Quicksort.
-     * @param low        начальный индекс
-     * @param high       конечный индекс
-     * @param comparator компаратор для сравнения
-     * @return индекс опорного элемента
-     */
-    private int partition(int low, int high, Comparator<? super E> comparator) {
-        E pivot = get(high); // Опорный элемент
-        int i = (low - 1); // Индекс меньшего элемента
-        for (int j = low; j < high; j++) {
-            if (comparator.compare(get(j), pivot) <= 0) {
-                i++;
-                swap(i, j); // Обмен
-            }
-        }
-        swap(i + 1, high);
-        return i + 1; // Возврат индекса опорного элемента
-    }
-
-    /**
-     * Меняет местами два элемента в массиве.
-     * @param i индекс первого элемента
-     * @param j индекс второго элемента
-     */
-    private void swap(int i, int j) {
-        Object temp = elements[i];
-        elements[i] = elements[j];
-        elements[j] = temp;
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     /**
@@ -145,10 +101,23 @@ public class MyArrayList<E> {
     }
 
     /**
-     * Возвращает текущий размер массива.
-     * @return текущий размер
+     * Проверяет, валиден ли индекс для доступа к элементу.
+     * @param index индекс для проверки
      */
-    public int size() {
-        return size;
+    private void validateIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Индекс вне диапазона: " + index);
+        }
+    }
+
+    /**
+     * Устанавливает новый элемент по указанному индексу, заменяя старый.
+     * @param index   индекс элемента, который нужно изменить
+     * @param element новый элемент, который нужно установить
+     * @throws IndexOutOfBoundsException если индекс вне допустимого диапазона
+     */
+    public void set(int index, E element) {
+        validateIndex(index); // Проверка индекса
+        elements[index] = element; // Установка нового значения по индексу
     }
 }
