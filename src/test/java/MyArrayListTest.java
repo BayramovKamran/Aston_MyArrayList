@@ -37,7 +37,7 @@ public class MyArrayListTest {
         MyArrayList<Integer> list = new MyArrayList<>();
         list.add(1);
         list.add(3);
-        list.add(1, 2); // Вставляем 2 на индекс 1
+        list.add(1, 2); 
         assertEquals(2, list.get(1));
     }
 
