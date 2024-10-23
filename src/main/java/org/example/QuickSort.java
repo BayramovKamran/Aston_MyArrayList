@@ -59,6 +59,7 @@ public class QuickSort {
                 swap(list, i, j);
             }
         }
+        
         // Обмен элемента с индексом i с опорным
         swap(list, i + 1, high);
         return i + 1; // Возвращаем индекс разделителя
